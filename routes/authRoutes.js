@@ -2,10 +2,12 @@ const express = require('express')
 const authController = require('../controllers/authController')
 const router = express.Router();
 
-router.post('/sginup',authController.signup);
-router.get('/sginup',authController.signup_get);
 
+
+router.post('/createAccount',authController.createAccount);
 router.post('/sginin',authController.signin);
-router.get('/sginin',authController.signin_get);
+router.PATCH('/activateAccount',authController.activateAccount);
+router.PATCH('/changePasword',authController.changePassword);
+router.delete('/deleteAccount',authController.deleteAccount);
 
 module.exports = router;

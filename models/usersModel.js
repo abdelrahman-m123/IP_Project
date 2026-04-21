@@ -1,7 +1,9 @@
 const { Timestamp } = require('bson');
+const { bool } = require('joi');
 const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
+
 	email: {
 		type: String,
 		required: [true, 'Email is required!'],
@@ -25,9 +27,16 @@ const userSchema = mongoose.Schema({
     type:{
         type:String,
         enum:['buyerAccount', 'sellerAccount'],
-        //required:[true,'user type is required'],
-        required:false
+        required:[true,'user type is required'],
     },
+	isActive:{
+		type:Boolean,
+		default:false
+	},
+	flagCount:{
+		type:Number,
+		default:0,
+	}
 },
     {
         Timestamps:true,
@@ -35,4 +44,4 @@ const userSchema = mongoose.Schema({
 
 )
 
-module.exports = mongoose.model('Users', userSchema);
+module.exports = mongoose.model('User', userSchema);

@@ -1,28 +1,36 @@
 const jwt = require("jsonwebtoken")
 const {signupSchema} = require('../middlewares/validator');
-const userModel = require('../models/usersModel');
+
 const {doHash,doPassValidation} = require("../utils/hashing");
 
+const userModel = require('../models/usersModel');
 
 
 
-exports.signup = async (req,res)=>{
-	const {email,password,username} = req.body;
-     
-     console.log(req.body)
 
-		const {error,value} = signupSchema.validate({email,password});
+exports.createAccount = async (req,res)=>{
 
-		if(error){
-		return res.status(401).json({success:false, message:"error in validating signing up",error:error.details[0].message});
-	    }
+	const email = req.body.email;
+	const password = req.body.password;
+	const username = req.body.username;
+	const type = req.body.type;
 
-	 const existingUser = await userModel.findOne({email});
+    console.log(req.body)
 
-	 if(existingUser){
+	const {error,value} = signupSchema.validate({email,password});
+
+	if(error){
+		return res.status(401).json({success:false,
+			 message:"error in validating signing up",error:error.details[0].message});
+	}
+
+	const existingUser = await userModel.findOne({email});
+
+	if(existingUser){
 		return res.status(401).json({success:false, message:"user already exists"});
-	 }
-	 else{
+	}
+
+	else{
 
 		const hashedPassword = await doHash(password,12);
 		console.log(password);
@@ -31,8 +39,8 @@ exports.signup = async (req,res)=>{
 		const newUser= new userModel({
 			email:email,
 			password:hashedPassword,
-            username:username
-
+            username:username,
+			type:type
 		})
 
 		const result = await newUser.save();
@@ -43,10 +51,6 @@ exports.signup = async (req,res)=>{
 
 
 }
-exports.signup_get = (req,res)=>{
-    res.send("singup get");
-}
-
 
 exports.signin = async (req,res)=>{
 	const {email,password} = req.body;
@@ -54,7 +58,6 @@ exports.signin = async (req,res)=>{
 	const existingUser = await userModel.findOne({email}).select("+password");
 
      if(existingUser){
-
 
 		const result = await doPassValidation(password,existingUser.password)
 		console.log(result)
@@ -68,13 +71,14 @@ exports.signin = async (req,res)=>{
 				
 			},"elfeel",
 			{
-				expiresIn:"8h"
+				expiresIn:"80h"
 			}
 		);
+
 		console.log(token)
 
 		return res.cookie("Authorization", "Bearer " + token, {
-			expires: new Date(Date.now() + 8 * 3600000),
+			expires: new Date(Date.now() + 80 * 3600000),
 			httpOnly: true,
 			secure: true
 		  }).json({
@@ -88,13 +92,18 @@ exports.signin = async (req,res)=>{
 		}
 
 	 }else{
-     return res.status(401).json({message:"user is not found"})
+     	return res.status(401).json({message:"user is not found"})
 	 }
 	 
 	
 }
 
+exports.activateAccount = async (req, res)=>{
 
-exports.signin_get = (req,res)=>{
-     res.send('signin page')
+}
+exports.changePassword = async (req, res)=>{
+
+}
+exports.deleteAccount = async (req, res)=>{
+
 }
