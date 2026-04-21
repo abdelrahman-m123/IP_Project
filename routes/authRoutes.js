@@ -6,8 +6,11 @@ const router = express.Router();
 
 router.post('/createAccount',authController.createAccount);
 router.post('/sginin',authController.signin);
+
 router.PATCH('/activateAccount',authController.activateAccount);
 router.PATCH('/changePasword',authController.changePassword);
+router.PATCH('/updateEmail',authController.updateEmail);
+
 router.delete('/deleteAccount',authController.deleteAccount);
 
 module.exports = router;

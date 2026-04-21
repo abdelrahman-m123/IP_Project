@@ -4,6 +4,7 @@ const { bool } = require('joi');
 const mongoose = require('mongoose')
 
 const orderSchema = new mongoose.Schema({
+    
     buyerId:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -21,6 +22,9 @@ const orderSchema = new mongoose.Schema({
         type: Number,
          required: true
         },
+    shippingAddress:{
+        type:String
+    },
     status: { 
         type: String, 
         enum: ['Pending', 'Shipped', 'Delivered', 'Cancelled'], 

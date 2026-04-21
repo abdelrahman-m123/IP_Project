@@ -1,6 +1,8 @@
+
 const { Timestamp } = require('bson');
 const { bool } = require('joi');
 const mongoose = require('mongoose');
+
 
 const userSchema = mongoose.Schema({
 
@@ -32,6 +34,9 @@ const userSchema = mongoose.Schema({
 	isActive:{
 		type:Boolean,
 		default:false
+	},
+	shippingAddress:{
+		type:String
 	},
 	flagCount:{
 		type:Number,

@@ -7,7 +7,6 @@ const userModel = require('../models/usersModel');
 
 
 
-
 exports.createAccount = async (req,res)=>{
 
 	const email = req.body.email;
@@ -102,6 +101,9 @@ exports.activateAccount = async (req, res)=>{
 
 }
 exports.changePassword = async (req, res)=>{
+
+}
+exports.updateEmail = async (req, res)=>{
 
 }
 exports.deleteAccount = async (req, res)=>{

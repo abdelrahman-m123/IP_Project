@@ -23,6 +23,8 @@ const productRoute = require('./routes/productRoutes');
 const reviewRoute = require('./routes/reviewRoutes');
 const orderRoute = require('./routes/orderRoutes');
 const cartRoute = require('./routes/cartRoutes');
+const buyerRoutes = require('./routes/BuyerRoutes');
+const sellerRoutes = require('./routes/SellerRoutes');
 
 
 
@@ -45,10 +47,16 @@ const ConnectedDB = async() =>{
 
 
 ConnectedDB();
+
+
 app.use("/auth",authRoute);
 app.use("/products",productRoute);
 app.use("/orders",reviewRoute,orderRoute);
 app.use("/cart",cartRoute);
+
+
+app.use("/buyer",buyerRoutes);
+app.use("/seller",sellerRoutes);
 
 
 
