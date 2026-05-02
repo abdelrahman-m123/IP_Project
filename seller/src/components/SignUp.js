@@ -2,7 +2,8 @@ import { useState } from 'react';
 import API from '../api';
 import './Auth.css';
 
-function SignIn({ onSwitchToSignUp }) {
+function SignUp({ onSwitchToSignIn }) {
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -13,9 +14,11 @@ function SignIn({ onSwitchToSignUp }) {
         setLoading(true);
         setError('');
         try {
-            const res = await API.post('/auth/signin', { email, password });
-            console.log(res.data);
-            alert('Signed in successfully!');
+            await API.post('/auth/createAccount', {
+                email, password, username, type: 'sellerAccount'
+            });
+            alert('Account created! Please sign in.');
+            onSwitchToSignIn();
         } catch (err) {
             setError(err.response?.data?.message || 'Something went wrong');
         } finally {
@@ -26,23 +29,26 @@ function SignIn({ onSwitchToSignUp }) {
     return (
         <div className="auth-page">
             <div className="auth-card">
-                <h2>Seller sign in</h2>
+                <h2>Create account</h2>
                 {error && <p className="auth-error">{error}</p>}
+                <label className="auth-label">Username</label>
+                <input type="text" placeholder="Your name" required
+                    value={username} onChange={(e) => setUsername(e.target.value)} />
                 <label className="auth-label">Email</label>
                 <input type="email" placeholder="you@email.com" required
                     value={email} onChange={(e) => setEmail(e.target.value)} />
                 <label className="auth-label">Password</label>
-                <input type="password" placeholder="Password" required
+                <input type="password" placeholder="Min 8 characters" required
                     value={password} onChange={(e) => setPassword(e.target.value)} />
                 <button type="submit" disabled={loading} onClick={handleSubmit}>
-                    {loading ? 'Signing in...' : 'Sign in'}
+                    {loading ? 'Creating...' : 'Create account'}
                 </button>
-                <p className="auth-switch" onClick={onSwitchToSignUp}>
-                    New seller? Create an account
+                <p className="auth-switch" onClick={onSwitchToSignIn}>
+                    Already have an account? Sign in
                 </p>
             </div>
         </div>
     );
 }
 
-export default SignIn;
+export default SignUp;
