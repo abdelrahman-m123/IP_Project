@@ -2,12 +2,19 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser')
+const cors = require('cors');
 
+
+app.use(cors({
+    origin: 'http://localhost:3001', 
+    credentials: true
+}));
 
 
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
 
 const User = require('./models/usersModel');
 // const Order = require('./models/orderModel');
