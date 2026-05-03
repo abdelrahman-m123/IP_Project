@@ -52,10 +52,11 @@ exports.createAccount = async (req,res)=>{
 }
 
 exports.signin = async (req,res)=>{
-	const {email,password} = req.body;
-        
-	const existingUser = await userModel.findOne({email}).select("+password");
+	console.log(req.body);
 
+	const {email,password} = req.body;
+    
+	const existingUser = await userModel.findOne({email}).select("+password");
      if(existingUser){
 
 		const result = await doPassValidation(password,existingUser.password)

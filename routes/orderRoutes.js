@@ -9,7 +9,7 @@ router.post('/addOrder/',orderController.addOrder);
 router.put('/updateOrder/',orderController.updateOrder);
 
 router.delete('/removeOrder/',orderController.removeOrder);
-router.patch('/flagOrder/',orderController.flagOrder);
+//router.patch('/flagOrder/',orderController.flagOrder);
 router.get('/traceOrder/',orderController.traceOrder);
 
 router.get('/myOrders/',orderController.getSellerOrders);

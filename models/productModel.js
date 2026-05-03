@@ -26,4 +26,5 @@ const ProductSchema = mongoose.Schema({
     deliveryTimeEstimate: { type: String, required: true } 
 },{timestamps:true});
 
+
 module.exports = mongoose.model('Product',ProductSchema);

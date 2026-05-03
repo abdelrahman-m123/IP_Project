@@ -28,7 +28,7 @@ const sellerRoutes = require('./routes/SellerRoutes');
 
 
 
-const authMiddleWare = require('./middlewares/authMiddleware');
+const {authMiddleWare} = require('./middlewares/authMiddleware');
 
 const { userInfo } = require('os');
 
@@ -60,7 +60,7 @@ app.use("/seller",sellerRoutes);
 
 
 
-app.get('/',authMiddleWare.authMiddleWare, (req, res) => {
+app.get('/',authMiddleWare, (req, res) => {
     console.log("/ fetched");
     res.send("Welcome to the GOAT "); 
 });
