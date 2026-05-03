@@ -1,20 +1,19 @@
 const express = require('express')
 const orderController = require('../controllers/orderController')
+const authMiddleware = require('../middlewares/authMiddleware')
 const router = express.Router();
 
 
 
-router.get('/getOrder/:id',orderController.getOrder);
-router.post('/addOrder/',orderController.addOrder);
-router.put('/updateOrder/',orderController.updateOrder);
+router.get('/getOrder/:id',authMiddleware.authMiddleWare, orderController.getOrder);
+router.post('/addOrder/',authMiddleware.authMiddleWare,orderController.addOrder);
+router.put('/updateOrder/:id',authMiddleware.authMiddleWare,orderController.updateOrder);
 
-router.delete('/removeOrder/',orderController.removeOrder);
-//router.patch('/flagOrder/',orderController.flagOrder);
-router.get('/traceOrder/',orderController.traceOrder);
+router.delete('/removeOrder/:id',authMiddleware.authMiddleWare,orderController.removeOrder);
+router.get('/traceOrder/:id',authMiddleware.authMiddleWare,orderController.traceOrder);
+router.get('/myOrders/',authMiddleware.authMiddleWare, orderController.getBuyerOrders);
 
-router.get('/myOrders/',orderController.getSellerOrders);
-
-router.get('/myOrders/:type/',orderController.getSellerOrdersBasedonType);
+router.get('/myOrders/:status/',authMiddleware.authMiddleWare, orderController.getSellerOrdersBasedonStatus);
 
 
 

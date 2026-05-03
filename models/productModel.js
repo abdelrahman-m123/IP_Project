@@ -23,6 +23,12 @@ const ProductSchema = mongoose.Schema({
         type:String,
         enum:['PC','Electronics','Health','Games','Tools']
     },
+    stock: {
+        type: Number,
+        required: false,
+        default: 100,
+        min: 0 
+    },
     deliveryTimeEstimate: { type: String, required: true } 
 },{timestamps:true});
 

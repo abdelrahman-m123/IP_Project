@@ -69,6 +69,7 @@ exports.signin = async (req,res)=>{
 				username:existingUser.username,
 				type:existingUser.type,
 				
+				
 			},"elfeel",
 			{
 				expiresIn:"80h"
