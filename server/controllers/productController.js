@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken")
+const mongoose = require("mongoose");
 const {signupSchema} = require('../middlewares/validator');
 
 const {doHash,doPassValidation} = require("../utils/hashing");
@@ -187,6 +188,64 @@ exports.browseCatalog = async(req, res)=>{
             return res.status(501).json({success:false, message:`server error${err}`});
     }
 
+}
+
+exports.getProducts = async(req, res)=>{
+    try{
+        const { category, seller, search, priceFrom, priceUpTo } = req.query;
+        const filter = {};
+
+        if(category){
+            const categories = ['PC','Electronics','Health','Games','Tools'];
+            if(!categories.includes(category)){
+                return res.status(400).json({success:false, message:"invalid category"});
+            }
+            filter.category = category;
+        }
+
+        if(seller){
+            if(!mongoose.Types.ObjectId.isValid(seller)){
+                return res.status(400).json({success:false, message:"invalid seller id"});
+            }
+            filter.sellerId = seller;
+        }
+
+        if(search){
+            filter.$or = [
+                { name: { $regex: search, $options: 'i' } },
+                { description: { $regex: search, $options: 'i' } }
+            ];
+        }
+
+        if(priceFrom !== undefined || priceUpTo !== undefined){
+            filter.price = {};
+
+            if(priceFrom !== undefined){
+                const minPrice = Number(priceFrom);
+                if(Number.isNaN(minPrice) || minPrice < 0){
+                    return res.status(400).json({success:false, message:"invalid priceFrom"});
+                }
+                filter.price.$gte = minPrice;
+            }
+
+            if(priceUpTo !== undefined){
+                const maxPrice = Number(priceUpTo);
+                if(Number.isNaN(maxPrice) || maxPrice < 0){
+                    return res.status(400).json({success:false, message:"invalid priceUpTo"});
+                }
+                filter.price.$lte = maxPrice;
+            }
+
+            if(filter.price.$gte !== undefined && filter.price.$lte !== undefined && filter.price.$gte > filter.price.$lte){
+                return res.status(400).json({success:false, message:"priceFrom should be less than or equal priceUpTo"});
+            }
+        }
+
+        const products = await productModel.find(filter);
+        res.status(200).json({success:true, result:products});
+    }catch(err){
+            return res.status(501).json({success:false, message:`server error${err}`});
+    }
 }
 
 exports.searchProduct = (req, res)=>{

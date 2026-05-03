@@ -10,6 +10,7 @@ router.put('/updateProduct/:id',AutoMiddleware.authMiddleWare,productController.
 router.delete('/removeProduct/:id',AutoMiddleware.authMiddleWare,productController.removeProduct);
 
 //front end
+router.get('/', productController.getProducts);
 router.get('/search', productController.searchProduct);
 
 router.get('/catalog', productController.browseCatalog);

@@ -81,7 +81,8 @@ exports.signin = async (req,res)=>{
 		return res.cookie("Authorization", "Bearer " + token, {
 			expires: new Date(Date.now() + 80 * 3600000),
 			httpOnly: true,
-			secure: true
+			secure: false,
+			sameSite: "lax"
 		  }).json({
 			success: true,
 			token,

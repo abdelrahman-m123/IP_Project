@@ -1,18 +1,52 @@
-import { useState } from 'react';
+import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
+import { isSignedIn } from './auth';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
+import LandingPage from './pages/LandingPage';
+import OrdersPage from './pages/OrdersPage';
+import SellerProfilePage from './pages/SellerProfilePage';
+import UserProfilePage from './pages/UserProfilePage';
+
+function SignInRoute() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const redirectTo = location.state?.from?.pathname || '/';
+
+  return <SignIn onSignedIn={() => navigate(redirectTo, { replace: true })} onSwitchToSignUp={() => navigate('/signup')} />;
+}
+
+function SignUpRoute() {
+  const navigate = useNavigate();
+
+  return <SignUp onSwitchToSignIn={() => navigate('/signin')} />;
+}
+
+function ProtectedRoute({ children }) {
+  const location = useLocation();
+
+  if(!isSignedIn()){
+    return <Navigate to="/signin" replace state={{ from: location }} />;
+  }
+
+  return children;
+}
 
 function App() {
-  const [page, setPage] = useState('signup');
-
   return (
-    <div className="App">
-      {page === 'signup' 
-        ? <SignUp onSwitchToSignIn={() => setPage('signin')} />
-        : <SignIn onSwitchToSignUp={() => setPage('signup')} />
-      }
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<ProtectedRoute><LandingPage /></ProtectedRoute>} />
+          <Route path="/seller/:sellerId" element={<ProtectedRoute><SellerProfilePage /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><UserProfilePage /></ProtectedRoute>} />
+          <Route path="/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>} />
+          <Route path="/signin" element={<SignInRoute />} />
+          <Route path="/signup" element={<SignUpRoute />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 

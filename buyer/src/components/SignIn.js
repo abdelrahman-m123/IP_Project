@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import API from '../api';
+import { saveAuthToken } from '../auth';
 import './Auth.css';
 
-function SignIn({ onSwitchToSignUp }) {
+function SignIn({ onSignedIn, onSwitchToSignUp }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -15,7 +16,9 @@ function SignIn({ onSwitchToSignUp }) {
         try {
             const res = await API.post('/auth/signin', { email, password });
             console.log(res.data);
+            saveAuthToken(res.data.token);
             alert('Signed in successfully!');
+            onSignedIn();
         } catch (err) {
             setError(err.response?.data?.message || 'Something went wrong');
         } finally {

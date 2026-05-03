@@ -15,7 +15,7 @@ function SignUp({ onSwitchToSignIn }) {
         setError('');
         try {
             await API.post('/auth/createAccount', {
-                email, password, username, type: 'sellerAccount'
+                email, password, username, type: 'buyerAccount'
             });
             alert('Account created! Please sign in.');
             onSwitchToSignIn();

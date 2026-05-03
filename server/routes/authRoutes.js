@@ -5,6 +5,7 @@ const router = express.Router();
 
 
 router.post('/createAccount',authController.createAccount);
+router.post('/signin',authController.signin);
 router.post('/sginin',authController.signin);
 
 router.patch('/activateAccount',authController.activateAccount);
